@@ -23,13 +23,11 @@ public class SectionController {
     private SectionService sectionService;
 
     @Autowired
-public SectionController (SectionRepository sectionRepository, SectionService sectionService, GeoClassRepository geoClassRepository) {
+    public SectionController(SectionRepository sectionRepository, SectionService sectionService, GeoClassRepository geoClassRepository) {
         this.sectionRepository = sectionRepository;
         this.geoClassRepository = geoClassRepository;
         this.sectionService = sectionService;
     }
-
-
 
     @GetMapping("/by-code")
     public ResponseEntity<List<Section>> readSectionsByGeoCode(@RequestParam String code) {
@@ -41,9 +39,7 @@ public SectionController (SectionRepository sectionRepository, SectionService se
         Optional<Section> section = sectionService.findSectionByName(name);
 
         if (section.isPresent()) {
- //         то же самое?
-          return new ResponseEntity(section, HttpStatus.OK);
-//            return ResponseEntity.ok().build();
+            return new ResponseEntity(section, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -51,30 +47,38 @@ public SectionController (SectionRepository sectionRepository, SectionService se
 
     @GetMapping("/all")
     public ResponseEntity<List<Section>> readAllSections() {
+//        GeoClass geo1 = new GeoClass("abc", "AC12");
+//        GeoClass geo2 = new GeoClass("bcd", "AC10");
+//        GeoClass geo0 = new GeoClass("bch", "AC00");
+//        geoClassRepository.saveAllAndFlush(Arrays.asList(geo1, geo2, geo0));
+//
+//        Section section1 = new Section("section1");
+//        section1.getGeoClasses().add(geo1);
+//        Section section2 = new Section("section2");
+//        section2.getGeoClasses().add(geo2);
+//        Section section3 = new Section("section3");
+//        section3.getGeoClasses().addAll(Arrays.asList(geo1, geo2));
+//        sectionRepository.saveAllAndFlush(Arrays.asList(section1, section2, section3));
 
-        geoClassRepository.deleteAll();
-        sectionRepository.deleteAll();
-        Section section1 = new Section("section1");
-        Section section2 = new Section("section2");
-        Section section3 = new Section("section3");
-        sectionRepository.saveAllAndFlush(Arrays.asList(section1, section2, section3));
-
-        GeoClass geo1 = new GeoClass("abc", "AC12");
-        GeoClass geo2 = new GeoClass("bcd", "AC10");
-        geoClassRepository.saveAndFlush(geo1);
-        geoClassRepository.saveAndFlush(geo2);
         return new ResponseEntity<>(sectionService.findAllSections(), HttpStatus.OK);
     }
 
-    @PostMapping ("/")
-    public ResponseEntity<Section> saveSection (@RequestBody Section section) {
-        return new ResponseEntity<>(sectionService.saveSection(section), HttpStatus.OK);
+    @PostMapping("/")
+    public ResponseEntity<Section> saveSection(@RequestBody Section section) {
+        try {
+            return new ResponseEntity<>(sectionService.saveSection(section), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
-    //нужны ли скобки
 
     @PutMapping("{id}")
-    public ResponseEntity<Section> updateSection (@PathVariable long id, @RequestBody Section section) {
-        return new ResponseEntity(sectionService.updateSection(id, section), HttpStatus.OK);
+    public ResponseEntity<Section> updateSection(@PathVariable long id, @RequestBody Section section) {
+        try {
+            return new ResponseEntity(sectionService.updateSection(id, section), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 

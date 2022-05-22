@@ -32,9 +32,11 @@ public class SectionService {
     }
 
     public Section saveSection(Section section) {
+        if (sectionRepository.findByName(section.getName()).isPresent()) {
+            throw new RuntimeException("Section already exists");
+        }
         return sectionRepository.save(section);
     }
-    //нкжно ли тут каждому геоклассу менять секцию?
 
     public Section updateSection(Long id, Section newSection) {
         return sectionRepository.findById(id).map(section -> {

@@ -44,15 +44,15 @@ class NatlexRestApplicationTests {
         geoClassRepository.deleteAll();
         sectionRepository.deleteAll();
 
-        Section section1 = new Section("section1");
-        Section section2 = new Section("section2");
-        Section section3 = new Section("section3");
-//        sectionRepository.saveAllAndFlush(Arrays.asList(section1, section2, section3));
-
         GeoClass geo1 = new GeoClass("abc", "AC12");
         GeoClass geo2 = new GeoClass("bcd", "AC10");
         geoClassRepository.saveAndFlush(geo1);
         geoClassRepository.saveAndFlush(geo2);
+
+        Section section1 = new Section("section1");
+        Section section2 = new Section("section2");
+        Section section3 = new Section("section3");
+//        sectionRepository.saveAllAndFlush(Arrays.asList(section1, section2, section3));
 
         section1.getGeoClasses().addAll(Arrays.asList(geo1, geo2));
 //        section2.getGeoClasses().add(geo1);

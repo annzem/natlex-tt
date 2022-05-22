@@ -9,12 +9,9 @@ public class GeoClass {
     public GeoClass () {
     }
 
-    public GeoClass (String name, String code
-//            , Section section
-    ) {
+    public GeoClass (String name, String code) {
         this.name = name;
         this.code = code;
-//this.section = section;
     }
 
     @Id

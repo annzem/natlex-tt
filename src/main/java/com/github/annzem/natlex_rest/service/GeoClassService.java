@@ -3,10 +3,13 @@ package com.github.annzem.natlex_rest.service;
 import com.github.annzem.natlex_rest.model.GeoClass;
 import com.github.annzem.natlex_rest.repository.GeoClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class GeoClassService {
 
     @Autowired
@@ -21,10 +24,13 @@ public class GeoClassService {
     }
 
     public List<GeoClass> findAllGeoClasses () {
-        return geoClassRepository.findAll();
+            return geoClassRepository.findAll();
     }
 
     public GeoClass saveGeoClass(GeoClass geoClass) {
+        if (geoClassRepository.findGeoClassByCode(geoClass.getCode()).isPresent()) {
+            throw new RuntimeException("GeoClass already exists");
+        }
         return geoClassRepository.save(geoClass);
     }
 
